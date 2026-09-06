@@ -28,6 +28,7 @@ env/
 # ===== 环境与密钥 =====
 .env
 .env.*
+!frontend/.env.example
 *.pem
 *.key
 
@@ -48,3 +49,5 @@ dist/
 build/
 node_modules/
 *.log
+frontend/test-results/
+frontend/playwright-report/

@@ -10,8 +10,9 @@
 |---|---|
 | 数据库 | MySQL 8.0（Docker 容器 `ecommerce-mysql`） |
 | 后端 | Python 3.11 / FastAPI / SQLAlchemy / PyMySQL |
+| 前端 | Vue 3 / TypeScript / Vite / Element Plus / ECharts；MSW 独立演示 |
 | 数据处理 | pandas（chunksize=100000 流式加载） |
-| 测试 | pytest，37 个用例全部通过 |
+| 测试 | 后端历史基线：pytest 37 passed；前端：8 个单元测试 + 6 个浏览器流程通过 |
 | 环境 | WSL2 Ubuntu + Conda（`bigdata` 环境） |
 
 ## 核心功能
@@ -25,7 +26,19 @@
 - 4 个数据库业务视图
 - ETL 幂等加载与断点恢复
 
-## 快速开始
+## 前端独立启动
+
+前端已实现六类业务页面，支持 Mock 独立演示与真实接口模式。安装 Node.js 22.12+（22 系列）或 24.x 后：
+
+```bash
+cd frontend
+npm ci
+npm run dev
+```
+
+默认使用合成演示数据，不需要部署后端。启动、构建、接口切换和测试见 [前端 README](frontend/README.md)，交付边界及联调事项见 [前端交接](docs/FRONTEND_HANDOVER.md)。真实接口联调由集成人员完成。
+
+## 后端快速开始（原交接基线）
 
 ```bash
 # 1. 启动数据库
@@ -48,6 +61,7 @@ cd .. && python -m pytest -v
 ecommerce_project/
 ├── backend/          # FastAPI 后端
 │   └── app/routers/  # dashboard / products / users / sessions / analytics
+├── frontend/         # Vue 前端、Mock、前端测试与启动说明
 ├── sql/              # 建模、约束、转换、ETL 控制、视图脚本（按序号执行）
 ├── scripts/
 │   ├── etl/          # 正式 ETL 脚本
@@ -83,6 +97,8 @@ ecommerce_project/
 
 | 文档 | 内容 |
 |---|---|
+| [frontend/README.md](frontend/README.md) | 前端独立开发、接口模式、Mock 与验证命令 |
+| [docs/FRONTEND_HANDOVER.md](docs/FRONTEND_HANDOVER.md) | 前端交接、界面截图与待联调事项 |
 | [docs/PROJECT_HANDOVER.md](docs/PROJECT_HANDOVER.md) | 交接手册：环境、启动、设计红线、故障排查 |
 | [docs/README.md](docs/README.md) | 设计依据与开发过程：数据验证、建模决策、ETL 演进 |
 | [docs/demo_data.md](docs/demo_data.md) | 演示数据基线与固定演示对象 |
