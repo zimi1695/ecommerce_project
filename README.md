@@ -64,8 +64,8 @@ ecommerce_project/
 ├── sql/              # 建模、约束、转换、ETL 控制、视图脚本（按序号执行）
 ├── scripts/
 │   ├── etl/          # 正式 ETL 脚本
-│   ├── analysis/     # 数据探索与依赖验证脚本
-│   └── validation/   # 历史 / 实验脚本
+│   ├── analysis/     # 数据探索与依赖验证脚本（01-15 按开发时序编号）
+│   └── deploy/       # WSL 部署：一键启动脚本与 systemd 服务单元
 ├── tests/            # pytest 测试
 ├── docs/             # 交接手册、设计依据、演示基线
 ├── data/
@@ -97,8 +97,8 @@ ecommerce_project/
 | 文档 | 内容 |
 |---|---|
 | [frontend/README.md](frontend/README.md) | 前端独立开发、接口模式、Mock 与验证命令 |
-| [docs/FRONTEND_HANDOVER.md](docs/FRONTEND_HANDOVER.md) | 前端交接、界面截图与待联调事项 |
 | [docs/PROJECT_HANDOVER.md](docs/PROJECT_HANDOVER.md) | 交接手册：环境、启动、设计红线、故障排查 |
+| [docs/FRONTEND_HANDOVER.md](docs/FRONTEND_HANDOVER.md) | 前端交接与验收记录（含集成确认结论、界面截图） |
 | [docs/README.md](docs/README.md) | 设计依据与开发过程：数据验证、建模决策、ETL 演进 |
 | [docs/demo_data.md](docs/demo_data.md) | 演示数据基线与固定演示对象 |
 

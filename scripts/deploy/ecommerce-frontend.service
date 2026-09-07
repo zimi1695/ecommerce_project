@@ -1,0 +1,13 @@
+[Unit]
+Description=Ecommerce frontend vite dev (api mode :5173)
+After=network.target
+
+[Service]
+User=li177
+WorkingDirectory=/home/li177/ecommerce_project/frontend
+ExecStart=/home/li177/.nvm/versions/node/v22.23.2/bin/node node_modules/vite/bin/vite.js --mode api --host 0.0.0.0 --port 5173
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

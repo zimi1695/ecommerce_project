@@ -59,7 +59,7 @@ python -m pytest -v          # 基线必须是 37 passed
 
 ## 5. ETL 说明
 
-正式脚本：`scripts/etl/run_etl.py`（`scripts/validation/` 下均为历史实验脚本，其中 `09_etl_prototype.py` 是原型，不是正式管线）。
+正式脚本：`scripts/etl/run_etl.py`。`scripts/analysis/` 下 01-15 按开发时序编号：01-07 数据探索与依赖验证，08 连库冒烟测试，**09 ETL 原型不是正式管线**，10-11 类别依赖复查，12-15 小批量加载测试。部署相关见 `scripts/deploy/`（一键启动 + systemd 服务单元）。
 
 流程：CSV → pandas 分块 → `staging_events` → 维度表 / 桥表 → Session UPSERT → `behavior_events`（`source_event_hash` 唯一约束去重）。
 
