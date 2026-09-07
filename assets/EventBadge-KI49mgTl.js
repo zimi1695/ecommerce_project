@@ -1,0 +1,1 @@
+import{In as e,Jt as t,Kn as n,Wn as r,Wt as i,Xt as a,qt as o,un as s}from"./vue-DYImKUrL.js";import{n as c}from"./utils-D0nr4f5q.js";var l=a({__name:`EventBadge`,props:{type:{}},setup(a){return(l,u)=>(s(),o(`span`,{class:r([`event-badge`,a.type])},[u[0]||=i(`span`,null,null,-1),t(n(e(c)[a.type]),1)],2))}});export{l as t};
