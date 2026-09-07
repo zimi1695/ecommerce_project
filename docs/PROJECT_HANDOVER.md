@@ -5,7 +5,7 @@
 
 ## 1. 项目现状
 
-后端历史基线为已完成并通过测试、约 600 万条真实事件（前 60 个 ETL batch）。前端已实现并提供独立 Mock 演示，真实接口联调待完成。前端交付不复测后端或数据库，详见 [前端交接](FRONTEND_HANDOVER.md)。
+后端历史基线为已完成并通过测试、约 600 万条真实事件（前 60 个 ETL batch）。前端六类页面已合入 main 并于 2026-09-07 完成真实接口联调（9 类接口实测、CORS 与索引性能修复，详见 [前端交接](FRONTEND_HANDOVER.md) 的集成确认节）。在线演示：https://zimi1695.github.io/ecommerce_project/ 。
 
 | 模块 | 状态 |
 |---|---|
@@ -14,9 +14,9 @@
 | ETL（幂等加载 / 断点恢复） | 已完成 |
 | FastAPI 后端（5 组路由） | 已完成 |
 | 业务视图（4 个） | 已完成 |
-| 自动化测试 | 已完成，37 passed |
-| 前端 | 六类页面已实现；支持 Mock 与真实接口模式，真实联调待完成 |
-| 课程设计文档（ER / DFD / 用例 / 数据字典） | 未开始 |
+| 自动化测试 | 后端 pytest 37 passed；前端 8 单元 + 6 浏览器流程通过 |
+| 前端 | 已合入 main 并完成真实接口联调（2026-09-07）；GitHub Pages 在线演示 |
+| 课程设计文档（ER / DFD / 用例 / 数据字典） | 未开始，当前最大缺口 |
 
 ## 2. 接手第一步
 
@@ -43,6 +43,10 @@ python -m pytest -v          # 基线必须是 37 passed
 | 数据库 / 用户 | `ecommerce` / `ecommerce` |
 | Python 环境 | Conda `bigdata` |
 | 后端启动 | `uvicorn backend.app.main:app --reload --host 0.0.0.0 --port 8000`（从项目根启动；`backend/` 目录下以 `app.main:app` 启动会因 `backend.app` 导入路径报错） |
+| 前端环境 | Node 22.12+/24.x（WSL 用 nvm 管理，当前 v22.23.2） |
+| 前端启动 | `cd frontend && npm run dev:api`（真实接口）/ `npm run dev`（Mock） |
+| 常驻服务 | `scripts/deploy/` 的 systemd 单元：`ecommerce-backend`、`ecommerce-frontend`，`systemctl status/restart` 管理 |
+| 在线演示 | https://zimi1695.github.io/ecommerce_project/ （push main 自动部署，Mock 构建） |
 
 ## 4. 当前数据规模
 
@@ -128,11 +132,10 @@ python scripts/etl/run_etl.py --resume   # 断点恢复
 
 ## 13. 协作分工建议
 
-前端实现与交接说明见 [FRONTEND_HANDOVER.md](FRONTEND_HANDOVER.md)，剩余工作包括真实接口联调与系统整体验收。
+前端实现与集成结论见 [FRONTEND_HANDOVER.md](FRONTEND_HANDOVER.md)（六类页面已交付合入，接口联调已完成）。剩余工作聚焦分析与文档：
 
 | 角色 | 负责 |
 |---|---|
-| 前端 | `frontend/`：Dashboard、商品、商品详情、用户行为、Session 详情、分析页 |
 | 系统分析 | DFD、用例图、数据字典、ER 图、模块结构图（注意 products-brands 是多对多，sessions-users 不要画成一对一） |
 | 测试 | `docs/test_cases.md` 正式测试用例表 + pytest 结果截图 |
 | 文档 | 项目报告、README、开发过程、问题与讨论、总结 |
@@ -142,7 +145,8 @@ python scripts/etl/run_etl.py --resume   # 断点恢复
 - [ ] MySQL 可启动，表结构 / 外键 / View 正常
 - [ ] FastAPI 可启动，六组 API 全部可用
 - [ ] 前端可启动（Dashboard / 商品 / 用户 / Session / 分析）
-- [ ] 37 个测试全部 PASSED
+- [ ] 后端 37 个测试全部 PASSED
+- [ ] 前端 `npm run check` 与浏览器流程通过
 - [ ] 正式测试用例表完整
 - [ ] ER / DFD / 用例 / 数据字典齐全
 - [ ] 报告与演示流程完成

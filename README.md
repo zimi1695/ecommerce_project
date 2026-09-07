@@ -2,7 +2,9 @@
 
 基于 MySQL 的多品类电商用户行为分析与管理系统（数据库课程实践）。
 
-以 Kaggle 2019 年 11 月电商行为数据（6750 万条事件、9 GB）为基础的数据库应用系统：数据建模、ETL 加载、REST API、自动化测试。表结构全部依据数据依赖验证结果决定，见 [docs/README.md](docs/README.md)。
+以 Kaggle 2019 年 11 月电商行为数据（6750 万条事件、9 GB）为基础的数据库应用系统：数据建模、ETL 加载、REST API、前端界面与自动化测试。表结构全部依据数据依赖验证结果决定，见 [docs/README.md](docs/README.md)。
+
+**在线演示**：https://zimi1695.github.io/ecommerce_project/ （Mock 演示构建，push main 自动部署，无需后端）
 
 ## 技术栈
 
@@ -26,33 +28,39 @@
 - 4 个数据库业务视图
 - ETL 幂等加载与断点恢复
 
-## 前端独立启动
+## 快速开始
 
-前端已实现六类业务页面，支持 Mock 独立演示与真实接口模式。安装 Node.js 22.12+（22 系列）或 24.x 后：
-
-```bash
-cd frontend
-npm ci
-npm run dev
-```
-
-默认使用合成演示数据，不需要部署后端。启动、构建、接口切换和测试见 [前端 README](frontend/README.md)，交付边界及联调事项见 [前端交接](docs/FRONTEND_HANDOVER.md)。真实接口联调由集成人员完成。
-
-## 后端快速开始（原交接基线）
+### 完整模式（后端 + 前端，真实数据）
 
 ```bash
-# 1. 启动数据库
+# 1. 启动数据库与后端（从项目根启动，backend/ 目录下启动会 import 报错）
 docker start ecommerce-mysql
-
-# 2. 激活环境并启动后端（从项目根启动，backend/ 目录下启动会 import 报错）
 conda activate bigdata
 uvicorn backend.app.main:app --reload --host 0.0.0.0 --port 8000
 
-# 3. 运行测试（基线：37 passed）
-python -m pytest -v
+# 2. 启动前端（连真实接口，Vite 代理 /api -> 127.0.0.1:8000）
+cd frontend
+npm run dev:api        # http://localhost:5173
 ```
 
-数据库连接：`127.0.0.1:3307`，库名 `ecommerce`，用户 `ecommerce`。
+WSL 下可用 systemd 常驻（崩溃自动重启）：`scripts/deploy/` 下有一键启动脚本与前后端服务单元，安装方式见交接手册。
+
+### 纯前端模式（Mock 数据，无需后端）
+
+```bash
+cd frontend
+npm ci                  # 首次
+npm run dev             # http://localhost:5173，合成演示数据
+```
+
+### 运行测试
+
+```bash
+python -m pytest -v     # 后端基线：37 passed
+cd frontend && npm run check   # 前端：类型 / lint / 格式 / 单元测试
+```
+
+数据库连接：`127.0.0.1:3307`，库名 `ecommerce`，用户 `ecommerce`。接口模式切换、构建与浏览器测试见 [前端 README](frontend/README.md)，交付边界及联调结论见 [前端交接](docs/FRONTEND_HANDOVER.md)。
 
 ## 目录结构
 
