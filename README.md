@@ -44,13 +44,12 @@ npm run dev
 # 1. 启动数据库
 docker start ecommerce-mysql
 
-# 2. 激活环境并启动后端
+# 2. 激活环境并启动后端（从项目根启动，backend/ 目录下启动会 import 报错）
 conda activate bigdata
-cd backend
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn backend.app.main:app --reload --host 0.0.0.0 --port 8000
 
 # 3. 运行测试（基线：37 passed）
-cd .. && python -m pytest -v
+python -m pytest -v
 ```
 
 数据库连接：`127.0.0.1:3307`，库名 `ecommerce`，用户 `ecommerce`。

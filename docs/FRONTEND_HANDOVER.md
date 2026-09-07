@@ -61,3 +61,19 @@
 转化接口统计两类行为在 Session 内共同出现，未验证顺序，前端不画严格逐级漏斗。Session 内可能关联多个用户，商品可能关联多个品牌；请在集成时保留这些含义。
 
 由用户自行与负责人对接。本次交付止于个人 Fork 的前端分支，不自动创建 PR、合并原仓库或发送消息。
+
+## 集成确认（2026-09-07，后端负责人回填）
+
+分支已合并至 `main`。联调环境：Docker MySQL（约 600 万真实事件）+ `uvicorn 127.0.0.1:8000`。9 类接口实测通过，响应字段与前端 `types.ts` 逐字段一致；后端 37 个测试全部通过。
+
+| 事项 | 结论 |
+|---|---|
+| API 地址与跨域 | 后端 `http://127.0.0.1:8000`；`main.py` 已加 CORSMiddleware（GET-only，allow_origins `*`），预检实测通过。dev:api 走 Vite 代理不受影响，正式构建直接配 `VITE_API_BASE_URL` |
+| 大整数 ID | 后端保持数值输出（`category_id` 超 JS 安全整数，如 `2053013555631882655`），前端 json-bigint + 字符串化处理正确，后端不改字符串 |
+| 时间 | 库内存储 UTC，响应无时区后缀，前端 `utc()` 原样展示，约定一致 |
+| 金额 | 数据集无币种字段，维持两位小数无符号 |
+| 聚合性能 | 新增索引 `idx_events_session_type (session_id, event_type)`，实测 conversion 37.4s → 3.6s、Session 详情 1.7s → 0.02s、overview 2.4s、top-products 3.2s，均在前端 30 秒超时内 |
+| Session 数据量 | 演示 Session 504 条事件 20ms 内返回，暂不做后端分页 |
+| 演示对象 | 真实数据库保留全部固定演示 ID（user 564068124 / product 1000978 / session 4488e77a…），Mock 切真实接口后页面数据不变 |
+
+本次集成同步的仓库改动：`backend/app/main.py`（CORS）、`sql/01_schema.sql`（索引定义同步）、README 与 PROJECT_HANDOVER 的后端启动命令修正（需从项目根目录以 `uvicorn backend.app.main:app` 启动，`backend/` 目录下启动会因 `backend.app` 导入路径报错）。

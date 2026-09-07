@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -13,6 +14,14 @@ from backend.app.routers import users
 app = FastAPI(
     title="E-commerce User Behavior Analysis System",
     version="1.0.0",
+)
+
+# 只读 GET API，允许跨域访问：开发走 Vite 同源代理（不触发 CORS），
+# 正式构建通过 VITE_API_BASE_URL 直连后端时依赖此配置。
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET"],
 )
 
 

@@ -42,7 +42,7 @@ python -m pytest -v          # 基线必须是 37 passed
 | 端口映射 | `127.0.0.1:3307 → 3306` |
 | 数据库 / 用户 | `ecommerce` / `ecommerce` |
 | Python 环境 | Conda `bigdata` |
-| 后端启动 | `cd backend && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000` |
+| 后端启动 | `uvicorn backend.app.main:app --reload --host 0.0.0.0 --port 8000`（从项目根启动；`backend/` 目录下以 `app.main:app` 启动会因 `backend.app` 导入路径报错） |
 
 ## 4. 当前数据规模
 

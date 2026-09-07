@@ -102,7 +102,8 @@ CREATE TABLE IF NOT EXISTS behavior_events (
     source_event_hash BINARY(32) NOT NULL,
 
     PRIMARY KEY (event_id),
-    UNIQUE KEY uk_source_event_hash (source_event_hash)
+    UNIQUE KEY uk_source_event_hash (source_event_hash),
+    KEY idx_events_session_type (session_id, event_type)
 ) ENGINE=InnoDB;
 
 
