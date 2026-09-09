@@ -109,6 +109,7 @@ ecommerce_project/
 | [docs/FRONTEND_HANDOVER.md](docs/FRONTEND_HANDOVER.md) | 前端交接与验收记录（含集成确认结论、界面截图） |
 | [docs/README.md](docs/README.md) | 设计依据与开发过程：数据验证、建模决策、ETL 演进 |
 | [docs/demo_data.md](docs/demo_data.md) | 演示数据基线与固定演示对象 |
+| [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) | 完整演示路线：七幕流程、数据故事、应急备案 |
 
 ## License
 
