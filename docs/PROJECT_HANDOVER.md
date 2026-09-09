@@ -113,24 +113,40 @@ python scripts/etl/run_etl.py --resume   # 断点恢复
 { "code": 404, "message": "Product not found", "data": null }
 ```
 
-## 10. 故障排查
+## 10. Mock 数据口径（2026-09-09 修正）
+
+在线演示（github.io）与 `npm run dev` 使用合成数据。初版用取模生成事件类型，导致 Session 漏斗失真（view→cart 98.6%，真实 3.68%）。已重写为按 session 特性生成、确定性伪随机，当前口径：
+
+| 指标 | Mock | 真实库 |
+|---|---|---|
+| 事件类型 view/cart/purchase | 96.5 / 1.2 / 2.4 % | 97.2 / 1.25 / 1.5 % |
+| view→cart | 3.67% | 3.68% |
+| cart→purchase | 54.3% | 54.2% |
+| view→purchase | 5.81% | 5.82% |
+| 时间跨度 | 全月 28 天 | 全月 |
+| 价格范围 | 0 ~ 2565 | 0 ~ 2574 |
+
+固定演示对象数字与真实接口**精确一致**（商品 1000978 = 22 条 view；用户 564068124 = 781 条事件含 265 购买；Session 4488e77a = 504 条 view），两种模式切换页面数字不变。背景数据约 4.7 万条事件合成抽样，总量不代表数据库规模。改动后 6 个 e2e + 8 个单元 + check 全绿；修改 `src/mocks/data.ts` 时保持演示对象数字对齐，跑 `scripts/frontend_check.sh` 与 `scripts/frontend_e2e.sh` 回归。
+
+## 11. 故障排查
 
 | 症状 | 处理 |
 |---|---|
 | 容器没起 | `docker start ecommerce-mysql` |
 | 后端没起 | 见第 3 节启动命令 |
+| 前端 e2e 起不来 | Chromium 系统库与中文字体已装齐（libnss3 / libasound2t64 / fonts-noto-cjk）；跑 e2e 前先停常驻前端服务（`scripts/frontend_e2e.sh` 已内置说明） |
 | pytest 失败 | 先跑 `python -m pytest -v` 定位用例，再 `git diff` 看改动，优先怀疑：结构变化 / API 字段变化 / SQL 口径变化 / 导入路径变化 |
 | 需要继续 ETL | 先查 `etl_runs` / `etl_batches` 最近状态，确认后再 `--resume` |
 
-## 11. 固定演示对象
+## 12. 固定演示对象
 
 统一使用，不要各自随便找 ID：user `564068124`、product `1000978`、session `4488e77a-9901-4c4b-b162-47a224ceab51`、brand `9 / samsung`、category `2053013555631882655 / electronics.smartphone`。详见 [demo_data.md](demo_data.md)。
 
-## 12. 原始数据
+## 13. 原始数据
 
 `data/raw/2019-Nov.csv`（9 GB，6750 万行）与 zip 均不删。Git 仓库不含数据文件，从 GitHub Release 下载。
 
-## 13. 协作分工建议
+## 14. 协作分工建议
 
 前端实现与集成结论见 [FRONTEND_HANDOVER.md](FRONTEND_HANDOVER.md)（六类页面已交付合入，接口联调已完成）。剩余工作聚焦分析与文档：
 
@@ -140,7 +156,7 @@ python scripts/etl/run_etl.py --resume   # 断点恢复
 | 测试 | `docs/test_cases.md` 正式测试用例表 + pytest 结果截图 |
 | 文档 | 项目报告、README、开发过程、问题与讨论、总结 |
 
-## 14. 提交前检查清单
+## 15. 提交前检查清单
 
 - [ ] MySQL 可启动，表结构 / 外键 / View 正常
 - [ ] FastAPI 可启动，六组 API 全部可用
