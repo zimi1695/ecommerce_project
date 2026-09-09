@@ -16,7 +16,7 @@
 6. 需要独立预览构建时运行 `npm run build:demo`、`npm run preview`。
 7. 接口负责人提供后端地址后，按 [前端 README](../frontend/README.md) 切换 `npm run dev:api`，真实部署前使用 `npm run build`。
 
-固定演示 ID 沿用 [演示基线](demo_data.md)，但 Mock 的事件和统计为合成数据，不代表该 ID 的真实记录。
+固定演示 ID 沿用 [演示基线](demo_data.md)。合成数据按真实库分布构造：事件类型 view 96.5% / cart 1.2% / purchase 2.4%，Session 漏斗 view→cart 3.67% / cart→purchase 54.3% / view→purchase 5.81%（真实口径 3.68% / 54.2% / 5.82%），时间全月分布、价格 0~2574 长尾。固定演示对象对齐真实记录，两种模式切换页面数字一致：商品 1000978 = 22 条 view，用户 564068124 = 781 条事件（265 购买），Session 4488e77a = 504 条 view。除演示对象外的背景数据仍为合成抽样，总量约 4.7 万条事件，不代表数据库规模。
 
 ## 验证范围
 
